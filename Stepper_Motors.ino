@@ -1,133 +1,292 @@
-//#include <AccelStepper.h>
-//#include <MultiStepper.h>
+import processing.serial.*;
+import cc.arduino.*;
+import org.firmata.*;
 
-//AccelStepper stepper1 (AccelStepper::DRIVER,3,2);
-//AccelStepper stepper2 (AccelStepper::DRIVER,5,4);
-//AccelStepper stepper3 (AccelStepper::DRIVER,7,6);
-//AccelStepper stepper4 (AccelStepper::DRIVER,9,8);
-//AccelStepper stepper5 (AccelStepper::DRIVER,11,10);
-//AccelStepper stepper6 (AccelStepper::DRIVER,13,12);
+String[] moves;
 
-int stepPin0 = 3;
-int stepPin1 = 5;
-int stepPin2 = 7;
-int stepPin3 = 9;
-int stepPin4 = 11;
-int stepPin5 = 13;
-
-unsigned long lastStep[]={0,0,0,0,0,0}; 
-boolean lastState[]={false, false, false, false, false, false}; 
-int stepPin[]= {stepPin0, stepPin1, stepPin2, stepPin3, stepPin4, stepPin5};
-
-void moveMotor(int motor, int interval) 
-{
-  if(micros()-lastStep[motor]>=interval) 
-  {
-    if(lastState[motor]) 
-    { 
-      digitalWrite(stepPin[motor],LOW);
-    }
-    else
-    { 
-      digitalWrite(stepPin[motor],HIGH);
-    }
-    lastState[motor]=!lastState[motor];
-    lastStep[motor]=micros();
-  }
-}
-
+Arduino arduino;
+  final int cw= 0;
+  final int ccw= 1;
+  
+  
+/* Directions: */
+final int dir1 = 1;
+final int dir2 = 1;
+final int dir3 = 1; 
+final int dir4 = 1; 
+final int dir5 = 1; 
+final int dir6 = 1; 
 
 void setup() {
-  // put your setup code here, to run once:
-   /* stepper1.setMaxSpeed(300.0);
-    stepper1.setSpeed(250);
-    
-    stepper2.setMaxSpeed(300.0);
-    stepper2.setSpeed(250);
-    
-    stepper3.setMaxSpeed(300.0);
-    stepper3.setSpeed(250);
-
-    stepper4.setMaxSpeed(300.0);
-    stepper4.setSpeed(250);
-    
-    stepper5.setMaxSpeed(300.0);
-    stepper5.setSpeed(250);
-    
-    stepper6.setMaxSpeed(300.0);
-    stepper6.setSpeed(250);
-
-*/
-Serial.begin(9600);
-pinMode(stepPin0, OUTPUT);
-pinMode(stepPin1, OUTPUT);
-pinMode(stepPin2, OUTPUT); 
-pinMode(stepPin3, OUTPUT); 
-pinMode(stepPin4, OUTPUT);
-pinMode(stepPin5, OUTPUT); 
-
+  
+  arduino = new Arduino (this, Arduino.list()[0], 57600);
+  String[] strings;
+  //size(750,600);
+  // Load text file as a string
+  strings = loadStrings("Test.txt");
+  // Print string for debugging
+  //println(strings[0]);
+  
+  moves = split(strings[0],' ');
+  //noLoop();
+   
+  //println(Arduino.list());
+   arduino.pinMode(2, arduino.OUTPUT);
+   arduino.pinMode(3, arduino.OUTPUT);
+   arduino.pinMode(4, arduino.OUTPUT);
+   arduino.pinMode(5, arduino.OUTPUT);
+   arduino.pinMode(6, arduino.OUTPUT);
+   arduino.pinMode(7, arduino.OUTPUT);
+   arduino.pinMode(8, arduino.OUTPUT);
+   arduino.pinMode(9, arduino.OUTPUT);
+   arduino.pinMode(10, arduino.OUTPUT);
+   arduino.pinMode(11, arduino.OUTPUT);
+   arduino.pinMode(12, arduino.OUTPUT);
+   arduino.pinMode(13, arduino.OUTPUT);
+   
+   int a = moves.length;
+  
+  for (int j=0; j<=a-4; j++){
+    print(moves[j]+"  ");
+    println(moves[a-4-j]);
+  }
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
 
+void draw() {
+  
+  move1a(1,250);
+  delay(500);
+}
+  
+  
+  
+void move1a(int speed, int turns){
 
-//stepper1.run(); 
-//stepper2.run(); 
-//stepper3.run();
-//stepper4.run(); 
-//stepper5.run(); 
-//stepper6.run();
-
-moveMotor(1,2000);
-moveMotor(2,2000);
-moveMotor(3,2000);
-moveMotor(4,2000);
-moveMotor(5,2000);
-moveMotor(6,2000);
-
-/*  while(Serial.available())
-  {
-    char In=Serial.read();
-    
-    if(In=='cw' || In=='CW')            // Clockwise 90
+    if(dir1==1)
     {
-    stepper1.move(50);
-    stepper2.move(50); 
-    stepper3.move(50);
-    stepper4.move(50);
-    stepper5.move(50);
-    stepper6.move(50);
+      arduino.digitalWrite(2, arduino.HIGH);
     }
-    
-     else if(In=='ccw' || In=='CCW')            //CCW 90
-    {
-    stepper1.move(150);
-    stepper2.move(150); 
-    stepper3.move(150);
-    stepper4.move(150);
-    stepper5.move(150);
-    stepper6.move(150);
-
-    }
-    
-     else if(In=='2' || In=='2')     // 180
-    {
-    stepper1.move(100);
-    stepper2.move(100); 
-    stepper3.move(100);
-    stepper4.move(100);
-    stepper5.move(100);
-    stepper6.move(100);
-    }
-    
-
-    
     else
     {
-      
+      arduino.digitalWrite(2, arduino.LOW);
     }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(3, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(3, arduino.LOW);
   }
+}
 
-*/
+  void move1b(int speed, int turns){
+    
+     if(dir1 == 1)
+    {
+      arduino.digitalWrite(2, arduino.LOW);
+    }
+    else
+    {
+      arduino.digitalWrite(2, arduino.HIGH);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(3, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(3, arduino.LOW);
+  }
+  }
+  
+  void move2a(int speed, int turns){
+  
+     if(dir2 == 1)
+    {
+      arduino.digitalWrite(4, arduino.HIGH);
+    }
+    else
+    {
+      arduino.digitalWrite(4, arduino.LOW);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(5, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(5, arduino.LOW);
+  }
+  } 
+  
+  
+  void move2b(int speed, int turns){
+    
+     if(dir2 == 1)
+    {
+      arduino.digitalWrite(4, arduino.LOW);
+    }
+    else
+    {
+      arduino.digitalWrite(4, arduino.HIGH);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(5, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(5, arduino.LOW);
+  }
+  }
+  
+  void move3a(int speed, int turns){ 
+   
+    if(dir3 == 1)
+    {
+      arduino.digitalWrite(6, arduino.HIGH);
+    }
+    else
+    {
+      arduino.digitalWrite(6, arduino.LOW);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(7, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(7, arduino.LOW);
+  }
+  }
+  
+  void move3b(int speed, int turns){
+    
+     if(dir3 == 1)
+    {
+      arduino.digitalWrite(6, arduino.LOW);
+    }
+    else
+    {
+      arduino.digitalWrite(6, arduino.HIGH);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(7, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(7, arduino.LOW);
+  }
+  }
+  
+  void move4a(int speed, int turns){
+
+     if(dir4 == 1)
+    {
+      arduino.digitalWrite(8, arduino.HIGH);
+    }
+    else
+    {
+      arduino.digitalWrite(8, arduino.LOW);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(9, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(9, arduino.LOW);
+  }
+  }
+  
+  void move4b(int speed, int turns){
+    
+     if(dir4 == 1)
+    {
+      arduino.digitalWrite(8, arduino.LOW);
+    }
+    else
+    {
+      arduino.digitalWrite(8, arduino.HIGH);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(9, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(9, arduino.LOW);
+  }
+  }
+  
+  void move5a(int speed, int turns){
+    
+     if(dir5 == 1)
+    {
+      arduino.digitalWrite(10, arduino.HIGH);
+    }
+    else
+    {
+      arduino.digitalWrite(10, arduino.LOW);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(11, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(11, arduino.LOW);
+  }
+  }
+  
+  void move5b(int speed, int turns){
+
+     if(dir5 == 1)
+    {
+      arduino.digitalWrite(10, arduino.LOW);
+    }
+    else
+    {
+      arduino.digitalWrite(10, arduino.HIGH);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(11, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(11, arduino.LOW);
+  }
+  }
+  
+  void move6a(int speed, int turns){
+
+     if(dir6 == 1)
+    {
+      arduino.digitalWrite(12, arduino.HIGH);
+    }
+    else
+    {
+      arduino.digitalWrite(12, arduino.LOW);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(13, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(13, arduino.LOW);
+  }
+  } 
+  
+  void move6b(int speed, int turns){
+    
+     if(dir6 == 1)
+    {
+      arduino.digitalWrite(12, arduino.LOW);
+    }
+    else
+    {
+      arduino.digitalWrite(12, arduino.HIGH);
+    }
+    
+    for(int b =0; b<turns; b++){
+      delay(speed); 
+      arduino.digitalWrite(13, arduino.HIGH);
+      delay(speed);
+      arduino.digitalWrite(13, arduino.LOW);
+  }
+   
 }
