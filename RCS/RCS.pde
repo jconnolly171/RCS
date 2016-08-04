@@ -32,7 +32,7 @@ void draw() {
     print(moves[j]+"  ");
     println(moves[a-4-j]);
   }
-  move(2, 1000);
+  move(2, 20000);
   
 }
   
