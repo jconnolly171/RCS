@@ -5,8 +5,6 @@ import org.firmata.*;
 String[] moves;
 
 Arduino arduino;
-  final int cw = 0;
-  final int ccw = 1;
   
 int a = moves.length;
   
