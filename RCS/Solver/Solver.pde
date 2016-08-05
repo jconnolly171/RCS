@@ -8,7 +8,7 @@ Arduino arduino;
 int delay = 650;
 
 final boolean solve =false;
-int z = 1000;
+int z = 75;
   
 int a;
   
